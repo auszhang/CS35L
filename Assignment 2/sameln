@@ -1,0 +1,60 @@
+#!/bin/bash
+
+dir=$1
+
+RESULT=`ls $dir | sort`
+HIDDEN=`ls -a $dir | grep '^\.' | sort`
+let num=0
+declare -a array
+
+restore="$IFS"
+IFS=$'\n'
+
+for file1 in $HIDDEN
+do
+    if [ -L "$dir/$file1" ]
+    then
+	:
+    elif [ ! -f "$dir/$file1" ]
+    then
+	:
+    elif [ ! -r "$dir/$file1" ]
+    then
+	echo "$file1 is not readable"
+    else
+	array[$num]="$dir/$file1"
+	let num=num+1
+    fi
+done
+
+for file2 in $RESULT
+do
+    if [ -L "$dir/$file2" ]
+    then
+        :
+    elif [ ! -f "$dir/$file2" ]
+    then
+        :
+    elif [ ! -r "$dir/$file2" ]
+    then
+        echo "$file2 is not readable"
+    else
+        array[$num]="$dir/$file2"
+        let num=num+1
+    fi
+done
+
+for (( i=0; i<$num; i++ ))
+do
+    for (( j=i+1; j<$num; j++ ))
+    do
+        cmp -s "${array[$i]}" "${array[$j]}"
+        if [ $? -eq 0 ]
+        then
+            ln -fP "${array[$i]}" "${array[$j]}"
+	    array[$j]=array[$i]
+        fi
+    done
+done
+
+IFS=$restore

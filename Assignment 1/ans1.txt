@@ -1,0 +1,107 @@
+Austin Zhang
+604736503
+CS35L Lab 6 - Justin Wood
+
+1.) 
+command: man -k [keyword]
+This command was found by using the hint provided (man man) and locating the appropriate command 
+based on the description.
+
+2.) 
+command1: which cp
+command2: which sh
+location1: /usr/bin/cp
+location2: /usr/bin/sh
+We can find the location of commands in the file system using the which command.
+
+3.)
+command: find /usr/bin -name "?"
+The following one character commands were found with explanations using man and help:
+'.': Read and execute commands from FILENAME in the current shell environment and return the exit 
+     status of the last command executed from filename. This fails if FILENAME cannot be read.
+':': No effect; the command does nothing beyond expanding arguments and performing any specified 
+     redirections. Exit status always succeeds
+'w': displays information about the users currently on the machine, and their processes.
+'[': Evaluate conditional expression.
+
+4.)
+First I navigated to /usr/bin using the command cd /usr/bin and ran the command ls -l | grep emacs. 
+This shows that the following link is actually executed:
+/etc/alternatives/emacs
+
+5.)
+/usr/bin/emacs uses version number 22.1.1 while the regular emacs uses version 24.3.1. They are 
+different because one is by default instsalled with the system. 
+
+6.) 
+g+s means that the user using the file will get the same permissions as the group (denoted by g) 
+that owns the file.
+o-x removes execution permission from other (denoted by o) users that do not own the file or are 
+not in the group.
+
+7.)
+command: find /usr/local/cs -type d -ctime 30
+This was determined using the command man find. 30 is the number of days and /usr/local/cs is the
+path.
+
+8.) 
+command: find /usr/bin -type l | wc
+271 symbolic links
+
+9.) 
+librom1394.so.0.3.0
+commands: 
+cd /usr/lib64
+ls -lt | grep ^-
+This lists the regular files in order of newest first. librom1394.so.0.3.0 was at the bottom of 
+the list.
+
+10.) The command locale gets its data from the Base Definitions volume of IEEE Std 1003.1-2001, 
+Chapter 7, Locale.
+command: man locale
+
+11.) 
+command: C-h a downcase
+The commands with downcase in their name:
+downcase-dwim
+downcase-region
+downcase-word
+
+12.)
+C-M-r: reverse regular expression search
+C-M-s: regular expression search
+C-M-t: transpose sexps
+C-M-u: move backward out of one level of parentheses
+C-M-v: scroll help window
+commands: 
+C-h b to show commands
+C-s to search for each command
+C-s to go to the next occurance of the search parameter. 
+
+13.)
+C-g signals a quit condition and cancels the command being entered.
+commands: 
+C-h b to show commands
+C-s to search for C-g
+
+14.) 
+yank pastes the last section of text that was "killed." This is bound to C-y
+commands: 
+C-h b to show commands
+C-s to search for yank
+
+15.)
+The only noticeable difference was that the output of the dired command contained two lines on 
+information about the current and parent directories.
+commands:
+ls -l
+dired
+
+
+
+
+
+
+
+
+

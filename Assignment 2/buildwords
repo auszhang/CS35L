@@ -1,0 +1,28 @@
+#Austin Zhang
+#604736503
+#CS35L
+#buildwords
+
+#Take words between <td> and <\td>
+grep '<td>.\{1,\}<\/td>' | \
+
+#Want only Hawaiian words, take every other line from 1
+sed -n '1~2!p' - | \
+
+#Capital letters to lowercase letters, replace ` with '
+tr "A-Z\`" "a-z\'" | \
+
+#Remove tags <td> </td> <u> </u>
+sed 's/<td>//g;s/<\/td>//g;s/<u>//g;s/<\/u>//g' | \
+
+#Remove leading spaces
+sed "s/^\s*//g" | \
+
+#Replace spaces/commas followed by spaces with new lines
+sed -E "s/,\s|\s/\n/g" | \
+
+#Output only the words that contain Hawaiian characters 
+grep "^[pk\' mnwlhaeiou]\{1,\}$" | \
+
+#Sort without duplicates
+sort -u

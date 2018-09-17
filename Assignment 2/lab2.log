@@ -1,0 +1,123 @@
+Austin Zhang
+604736503
+
+CS35L 
+lab2.log
+
+1. SSH into lnxsrv09 server. Typing the shell command 'locale' outputted: 
+"LC_CTYPE = "en_US.UTF-8". Typed the shell command: export LC_ALL='C'. Typed the shell 
+command 'locale' again, which outputted LC_CTYPE="C".
+
+2. Sorted the words: sort -u /usr/share/dict/words > words
+
+3. Download webpage: 
+wget http://web.cs.ucla.edu/classes/spring18/cs35L/assign/assign2.html
+
+4. tr -c 'A-Za-z' '[\n*]' < assign2.html
+Replaces characters outside of A-Z and a-z with newline characters.
+
+5. tr -cs 'A-Za-z' '[\n*]' < assign2.html
+Also replaces with newline characters, and then "squeezes" each string of 
+multiple newlines
+into a single newline, making the output more compact.
+
+6. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort 
+Does the same thing as the previous two commands, but sorts all the words 
+onto newlines.
+
+7. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u
+This command does the same thing as the previous commands, but the -u 
+deletes all the 
+duplicate words.
+
+8. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+This command compares the contents of assign2.html with the contents of 
+words. The output 
+is separated into three columns. The first column contains the values that 
+are unique to 
+assign2.html. The second column contains the values that are unique to 
+words (all the words
+in the dictionary). The third column contains the values that are contained in both. 
+
+9. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words
+This command does the same thing as the previous, but omits the second and third columns, 
+which were the longest. This only shows the (sorted) contents contained in assign2.html.
+
+10. Download Hawaiian webpage:
+wget http://mauimapp.com/moolelo/hwnwdseng.htm
+
+11. Write buildwords script:
+
+#Take words between <td> and <\td>
+grep '<td>.\{1,\}<\/td>' | \
+
+#Want only Hawaiian words, take every other line from 1
+sed -n '1~2!p' - | \
+
+#Capital letters to lowercase letters, replace ` with '
+tr "A-Z\`" "a-z\'" | \
+
+#Remove tags <td> </td> <u> </u>
+sed 's/<td>//g;s/<\/td>//g;s/<u>//g;s/<\/u>//g' | \
+
+#Remove leading spaces
+sed "s/^\s*//g" | \
+
+#Replace spaces/commas followed by spaces with new lines
+sed -E "s/,\s|\s/\n/g" | \
+
+#Output only the words that contain Hawaiian characters 
+grep "^[pk\' mnwlhaeiou]\{1,\}$" | \
+
+#Sort without duplicates
+sort -u
+
+12. Make the script executable:
+chmod u+x buildwords
+
+13. Run the script on the Hawaiian webpage to build a Hawaiian dictionary 
+stored in hwords:
+./buildwords < hwnwdseng.htm > hwords
+
+14. Spell check Hawaiian under the assumption that hwords is a Hawaiian 
+dictionary, changing
+inputs that are upper case to lower case before being checked:
+cat assign2.html |
+tr -cs "pk\'mnwlhaeiou" '[\n*]' |
+tr '[:upper:]' '[:lower:]' |
+sort -u | comm -23 - hwords > mispelledHawaiian
+
+wc -w mispelledHawaiian
+199 mispelledHawaiian
+
+The output 199 mispelledHawaiian indicates that the file mispelledHawaiian 
+had 199 mispelled
+Hawaiian words.
+
+15. Mispelled English Words:
+cat assign2.html |
+tr -cs 'A-Za-z' '[\n*]' | 
+tr '[:upper:]' '[:lower:]' |
+sort -u | comm -23 - words > mispelledEnglish
+
+wc -w mispellededEngligsh
+412 mispelledEnglish
+
+There are 412 mispelled English words
+
+16. Mispelled as English but not as Hawaiian:
+cat mispelledEnglish |
+tr -cs "pk\'mnwlhaeiou" '[\n*]' |
+sort -u | comm -12 - hwords > engNotHawaiian
+
+Example: wiki
+
+
+17. Mispelled as Hawaiian but not as English:
+cat mispelledHaiwaiian |
+tr -cs 'A-Za-z' '[\n*]' |
+sort -u | comm -12 - words > hawNotEng
+
+No examples were found.
+
+
