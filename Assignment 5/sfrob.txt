@@ -1,0 +1,50 @@
+Austin Zhang
+604736503
+CS35L
+sfrobu.txt
+
+A text file sfrob.txt containing the results of your sfrob performance comparison as described in 
+the homework.
+
+
+sfrobu:
+
+time ./sfrobu < reallybig.txt > output_sfrobu
+
+real	0m5.691s
+user	0m0.277s
+sys		0m5.421s
+
+
+sfrobu -f: 
+
+time ./sfrobu -f < reallybig.txt > output_sfrobu
+
+real	0m5.881s
+user	0m0.298s
+sys		0m5.528s
+
+
+
+sfrobs:
+
+time ./sfrobs < reallybig.txt > output_sfrobu
+
+real	0m0.081s
+user	0m0.020s
+sys		0m0.026s
+
+
+
+sfrobs -f:
+
+time ./sfrobs -f < reallybig.txt > output_sfrobu
+
+real	0m0.081s
+user	0m0.022s
+sys		0m0.029s
+
+
+From the results, it is clear that from the time function, the shell script version 
+is much, much faster than the C program with system calls. The version tagged with -f
+of each is a little bit slower than without the -f tag.

@@ -1,0 +1,84 @@
+Austin Zhang
+604736503
+CS35L Lab 3
+lab3.txt
+
+1. Downloaded Coreutils 8.29.
+Moved it to the linux sever
+
+2. The following steps are for installing the program:
+
+Access SEASnet linux server through putty
+ssh austinz@lnxsrv06.seas.ucla.edu
+
+Unzip tar file
+tar -xJvf coreutils-8.29.tar.xz
+
+Make a directory to which to install the program
+mkdir coreutilsinstall
+
+Go to the folder where coreutils was unzipped
+cd coreutils-8.29
+
+Configure and install
+./configure --prefix=/w/home.07/ee/ugrad/austinz/Desktop/coreutilsinstall
+
+Compile the package
+make
+
+Install the program
+make install prefix=/w/home.07/ee/ugrad/austinz/Desktop/coreutilsinstall
+
+3. The following steps are for reproducing the problem:
+
+Go to the folder
+cd ../coreutilsinstall/bin
+
+Run the command
+./ls -aA
+
+This included . and .. in the output, which is unintended, as specified by the assignment.
+
+4. Applying the patch
+Go to the coreutils-8.29/src folder
+
+Create a file called patch.diff in the current folder and paste in the contents of Eggert's patch.
+
+Change the path names to /w/home.07/ee/ugrad/austinz/Desktop/Coreutils-8.29/src/ls.c for both both the original file and the modified file for ls.c
+
+Change the path names to /w/home.07/ee/ugrad/austinz/Desktop/Coreutils-8.29/tests/local.mk for both the original file and the modified file for local.mk
+
+Patching ls.c
+patch -p9 < patch.diff 
+
+Go to the coreutils-8.29/tests folder
+Create a file called patch.diff in the current folder and paste in the contents of Eggert's patch.
+
+Change the path names to /w/home.07/ee/ugrad/austinz/Desktop/Coreutils-8.29/src/ls.c for both both the original file and the modified file for ls.c
+
+Change the path names to /w/home.07/ee/ugrad/austinz/Desktop/Coreutils-8.29/tests/local.mk for both the original file and the modified file for local.mk 
+
+Patching local.mk and tests/ls/a-option.sh:
+patch -Np1 --ignore-whitespace < patch.diff
+
+Check to see if patch was successful:
+vim ls.c
+vim local.mk
+
+The change has been successful. 
+
+5. Compiling and Installing
+
+Navigate to coreutils-8.29 
+cd ..
+
+Run autoreconfigure:
+autoreconf -f -i
+
+Compile again
+make
+
+6. Testing fix
+To test the fix, run ./ls -a -A on an empty directory
+
+

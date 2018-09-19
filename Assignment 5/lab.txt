@@ -1,0 +1,145 @@
+Austin Zhang
+604736503
+CS35L
+Assignment 5
+lab.txt
+
+Created the two C programs tr2b.c and tr2u.c as specified in the assignment web page. Both programs use the same code for error checking lengths, arguments and duplicates. The programs use either getchar or read to read one byte at a time, and putchar or write to write the corresponding character (transliterating it if a match is found). 
+
+Compile the two programs:
+gcc -o tr2b tr2b.c
+gcc -o tr2u tr2u.c
+
+Make a file that is 5MB, as specified in the assignment spec:
+dd if=/dev/urandom of=reallybig.txt bs=1000000 count=5
+
+Compare system calls issued by tr2b and tr2u when copying one file to another:
+
+Buffered:
+strace -c ./tr2b 'a' 'x' < reallybig.txt > output_tr2b
+Output:
+Lengths are not equal.% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00    0.000000           0         1           read
+  0.00    0.000000           0         1           write
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         7           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000000                    24         1 total
+
+24 calls were made
+
+Unbuffered: 
+strace -c ./tr2u 'a' 'x' < reallybig.txt > output_tr2u
+
+Output:
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00   26.060017           5   5000000           write
+  0.00   21.388860           4   5000002           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         5           mmap
+  0.00    0.000000           0         2           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   47.448877              10000020         1 total
+
+The output had 10000020 system calls and it took a long time to run.
+tr2u made significantly more system calls because it made two syscalls for reach byte.
+
+Compare system calls issued by tr2b and tr2u when copying a file to the terminal
+Buffered: 
+strace -c ./tr2b 'a' 'x' < reallybig.txt
+
+Output: 
+Lengths are not equal.% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00    0.000000           0         1           read
+  0.00    0.000000           0         1           write
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         7           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000000                    24         1 total
+
+24 system calls were made
+
+Unbuffered: 
+strace -c ./tr2u 'a' 'x' < reallybig.txt
+
+Program stopped after 5 seconds...
+Output:
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+  0.00    1.468001           5     90824           write
+  0.00    1.401200           4     90825           read
+  0.00    1.000018           5         4           mprotect
+  0.00    1.000012          12         1           munmap
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         7           mmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    4.869431                181670         1 total
+
+The program did not finish running but displayed 181670 system calls. 
+
+
+Testing time to copy one file to another:
+Buffered:
+time ./tr2b 'abc' 'xyz' < reallybig.txt > output_tr2b
+
+Output: 
+Lengths are not equal.
+real    0m0.004s
+user    0m0.002s
+sys     0m0.000s
+
+Unbuffered: 
+time ./tr2u 'abc' 'xyz' < reallybig.txt > output_tr2u
+
+Output:
+real	0m6.521s
+user	0m0.255s
+sys		0m6.274s
+
+Testing time to copy a file to the terminal
+Buffered:
+time ./tr2b 'abc' 'xyz' < reallybig.txt
+
+Output:
+Lengths are not equal.
+real    0m0.003s
+user    0m0.001s
+sys     0m0.000s
+
+Unbuffered:
+time ./tr2u 'abc' 'xyz' < reallybig.txt
+
+Attempting to let this command run to completion resulted in 
+my terminal freezing :(

@@ -1,0 +1,140 @@
+Austin Zhang
+604736503
+CS35L Lab 4
+lab4.txt
+
+Make the directory to install the buggy version of coreutils
+mkdir coreutilsinstall
+
+Get the buggy version of coreutils from the webpage
+wget http://web.cs.ucla.edu/classes/spring18/cs35L/assign/coreutils-with-bug.tar.gz
+
+Unzip 
+tar -xvzf coreutils-with-bug.tar.gz
+
+Go to the unzipped folder
+cd coreutils-with-bug 
+
+Configure and build
+./configure --prefix='/w/home.07/ee/ugrad/austinz/Desktop/coreutilsinstall'
+make
+
+The following error is thrown:
+In file included from utimecmp.c:41:0:
+utimens.h:2:5: error: conflicting types for 'futimens'
+ int futimens (int, char const *, struct timespec const [2]);
+     ^
+In file included from utimecmp.h:25:0,
+                 from utimecmp.c:25:
+/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+ extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+
+The error message indicates that the program cannot compile because the function 'funtimens' is defined in another file.
+
+Get the patch:
+wget http://web.cs.ucla.edu/classes/spring18/cs35L/assign/coreutils.diff
+
+Apply patch:
+patch -p0 < coreutils.diff
+
+patching file lib/utimens.c
+patching file lib/utimens.h
+patching file src/copy.c
+patching file src/tee.c
+patching file src/touch.c
+
+The patch was applied successfully.
+
+Configure and build
+./configure --prefix='/w/home.07/ee/ugrad/austinz/Desktop/coreautilsinstall'
+make
+make install prefix='/w/home.07/ee/ugrad/austinz/Desktop/coreautilsinstall'
+
+Installed successfully, and futimens was changed to coreutils_funtimens
+
+Reproducing the problem:
+
+cd ~/Desktop
+
+Run the commands as specified in the assignment spec
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/Desktop/coreutilsinstall/bin/ls -lt --full-time wwi-armistice now now1
+
+Output: 
+-rw-r--r-- 1 austinz eeugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 austinz eeugrad 0 2018-05-01 23:10:22.373774882 +0000 now1
+-rw-r--r-- 1 austinz eeugrad 0 2018-05-01 23:10:14.945571778 +0000 now
+
+cd ~/Desktop
+rm -fr $tmp
+
+Finding the bug: 
+cd ~/Desktop/coreutilsinstall/bin
+gdb ls
+(gdb) info functions
+
+The function compare_mtime might be the cause of the bug. 
+
+Set breakpoint at this function
+(gdb) break compare_mtime
+(gdb) r -lt --full-time wwi-armistice now now1
+(gdb) list
+(gdb) si
+
+Now we can see the function timespec_cmp
+
+timespec_cmp (struct timespec a, struct timespec b)
+{
+	int diff = a.tv_sec - b.tv_sec;
+	return diff ? diff : a.tv_nsec - b.tv_nsec;
+}
+
+a.tv_nsec is small enough to allow for integer overflow. We need to edit the function
+
+Exit gdb and make a copy of the timespec.h file and edit the function in the copy so we can create a diff file. 
+q
+cd ~/Desktop/coreutils-with-bug/lib
+cp timespec.h ../../
+cd ../../
+emacs timespec.h
+
+Edit the timespec_cmp function:
+timespec_cmp (struct timespec a, struct timespec b)
+{
+	return a.tv_sec > b.tv_sec ? 1 : (a.tv_sec < b.tv_sec ? -1 : a.tv_nsec - b.tv_nsec);
+}
+
+This does a direct comparison rather than subtraction to avoid the overflow issue.
+
+Make the diff file:
+diff -u coreutils-with-bug/lib/timespec.h timespec.h > lab4.diff
+
+Apply the patch
+cd coreutils-with-bug
+patch -p0 < ../lab4.diff
+[when prompted which file to patch: lib/timespec.h]
+
+patching file lib/timespec.h
+
+Test the patch:
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/Desktop/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+Output:
+-rw-r--r-- 1 austinz eeugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 austinz eeugrad 0 2018-05-01 23:49:55.381681794 +0000 now1
+-rw-r--r-- 1 austinz eeugrad 0 2018-05-01 23:49:45.489410883 +0000 now
+
+The output is now correct. 
+
+SEASnet appears to output 1918. 
