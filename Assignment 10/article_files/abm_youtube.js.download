@@ -1,0 +1,46 @@
+jQuery(function ($) {
+
+    // Load YouTube IFrame API.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Add an event listener to each of the existing iframe#youtube_video
+    window.onYouTubeIframeAPIReady = function() {
+        $('.youtube-field-player').each(function (index) {
+            window[$(this).attr('id')] = new YT.Player($(this).attr('id'), {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+            if (index == 0) {
+                window["currentplayerid"] = $(this).attr('id');
+                console.log("CURRENT PLAYER ID (INITIALLY) = " + window['currentplayerid']);
+            }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+//        console.log("DO SOMETHING");
+    }
+
+    //$('.bss-prev, .bss-next').click(function() {
+    //    var currentplayer = window['currentplayerid'];
+    //    console.log(currentplayer);
+    //    window[currentplayer].pauseVideo();
+    //    window["currentplayerid"] = $('.bss-show .youtube-field-player').attr('id');
+    //    currentplayer = window['currentplayerid'];
+    //    window[currentplayer].playVideo();
+    //});
+
+    $('.bss-prev, .bss-next').click(function() {
+        var currentplayer = window['currentplayerid'];
+        //window['youtube-field-player'].pauseVideo();
+        window[currentplayer].pauseVideo();
+        window["currentplayerid"] = $('.bss-show .youtube-field-player').attr('id');
+        var currentplayer = window['currentplayerid'];
+        window[currentplayer].playVideo();
+    });
+
+});

@@ -1,0 +1,70 @@
+Austin Zhang
+604736503
+CS35L Lab 6
+log.txt
+
+Check the version of sort:
+sort --version
+
+Output:
+sort (GNU coreutils) 8.22
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Mike Haertel and Paul Eggert.
+
+The version I have is 8.22; this is new enough.
+
+Generate a file containing 10,000,000 random single-precision floating point numbers:
+4 bytes per number, so we need 40MB of data. 
+To generate single precision FP numbers, use -t fF
+
+cd ~/Desktop/CS35L/Lab6
+od -t fF -N 40000000 < /dev/urandom | sed 's/^[0-7]* *//' 
+| tr -s ' ' '\n' > random.txt
+
+
+Time the sort:
+
+No parallel:
+time -p sort -g random.txt > /dev/null
+
+Output:
+real 21.87
+user 118.53
+sys 0.46
+
+1 Thread:
+time -p sort -g --parallel=1 random.txt > /dev/null
+
+Output:
+real 111.90
+user 111.66
+sys 0.22
+
+
+2 Threads:
+time -p sort -g --parallel=2 random.txt > /dev/null
+
+Output:
+real 60.36
+user 114.35
+sys 0.29
+
+4 Threads:
+time -p sort -g --parallel=4 random.txt > /dev/null
+
+Output:
+real 34.99
+user 117.57
+sys 0.39
+
+8 Threads: 
+time -p sort -g --parallel=8 random.txt > /dev/null
+
+Output: 
+real 22.55
+user 121.29
+sys 0.46

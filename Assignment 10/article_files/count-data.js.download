@@ -1,0 +1,5 @@
+var DISQUSWIDGETS;
+
+if (typeof DISQUSWIDGETS != 'undefined') {
+    DISQUSWIDGETS.displayCount({"text":{"and":"and","comments":{"zero":"","multiple":"{num} Comments","one":"1 Comment"}},"counts":[{"id":"uuid\/31fd18be-dee0-4365-b14c-ff5b5f4ce1d3","comments":0}]});
+}

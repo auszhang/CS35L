@@ -1,0 +1,46 @@
+@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700,300);
+body { background: #000000; font-family: "Yanone Kaffeesatz", sans-serif; letter-spacing: 1px; padding: 0; margin: 0; }
+
+#main { width: 100%; }
+
+#logo { max-width: 40em; margin: 2em auto 0; }
+
+#form { width: 25em; margin: auto; }
+
+.portal-footer-form #main { border-left: 1px solid #222222; }
+.portal-footer-form div.footer-btn button { height: 50px; width: 100%; }
+
+h3 { margin: 0; font-size: 1.7em; color: #ffffff; padding: 1em 0; text-align: center; }
+
+div#sub-info { position: relative; }
+
+#footer-form { max-width: 400px; margin: auto; }
+
+#email_verify_alert { display: block; padding: 20px 0 0; font-size: 20px; color: #ff6666; font-weight: bold; text-align: center; }
+
+.newsletter-options { margin: 20px 40px; }
+.newsletter-options .newsletters .item { margin-bottom: 1em; max-width: 25em; font-weight: lighter; }
+.newsletter-options .newsletters .item .header { font-size: 1.1em; color: #ffffff; }
+.newsletter-options .newsletters .item .description { font-size: 1em; color: #bbb; }
+
+input[type="checkbox"] { float: left; display: block; }
+
+input[type="text"].cai { width: 46%; margin-right: 5px; }
+
+select.cai { width: 47%; }
+
+h1.chngadd-title { text-align: center; }
+
+label { display: block; margin-left: 2em; }
+
+input.text { width: 276px; margin: 4px 40px; padding: 10px 20px; font-family: "Yanone Kaffeesatz", sans-serif; font-size: 1.1em; }
+
+div.footer-btn #submit { text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-size: 1.7em; font-weight: lighter; height: 2em; width: 12em; border: 0; border-radius: 0; display: block; margin: auto; padding: 0; cursor: pointer; background: forestgreen; color: white; }
+
+div.footer-btn2 #submit { text-align: center; font-family: "Yanone Kaffeesatz", sans-serif; font-size: 1.3em; font-weight: lighter; height: 2em; width: 10em; border: 0; border-radius: 0; display: block; margin: auto; padding: 0; cursor: pointer; margin-top: 15px; background: darkblue; color: white; }
+
+div#pdd_link a { color: white; }
+
+.submit-message { display: none; }
+
+/*# sourceMappingURL=footer-form.css.map */

@@ -1,0 +1,7 @@
+Austin Zhang
+604736503
+CS35L
+Assignment 9
+gitk-description.txt
+
+The top of the window consists of a section with three columns. The first column contains a visual and textual description of the branch and existing commits. The second column details the contributor and their email and the third column indicates the date that the commit was made. The bottom left area contains the changelog, along with the diff of the commit of the modified files. The bottom right window shows the names of the files that were affected by the commit that was selected above. 

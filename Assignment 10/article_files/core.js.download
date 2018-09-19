@@ -1,0 +1,222 @@
+var ABM = window.ABM || {};
+
+(function ($) {
+
+  ABM.behaviors = {
+    
+    mobileMainNav: function () {
+      if (document.getElementById('mobile-main-menu')) return;
+      $('#block-system-main-menu').clone().attr('id', 'mobile-main-menu').prependTo('#header');
+      $( document.createElement('a') ).addClass('mobile-menu-trigger').prependTo('#header');
+      $('a.mobile-menu-trigger').on('click.mobileNav', this.dropTopLevel);
+      $('li.expanded').on('click.mobileNav', this.dropSubLevel);
+      $('a', '#mobile-main-menu').on('click.mobileNav', function(e) {
+        e.stopPropagation();
+      });
+    },
+
+    dropTopLevel: function(el) {
+//      console.log($('.block-content > ul.menu', '#mobile-main-menu'));
+      $('ul.menu:first', '#mobile-main-menu').toggle();
+    },
+
+    dropSubLevel: function(e) {
+      $('> ul.menu', this).toggle();
+      $(this).toggleClass('open');
+      e.stopPropagation();
+    }
+
+  };
+
+
+
+  ABM.queries = {
+    mobileBreakpoint: 768,
+    smartphone: function() {
+      ABM.behaviors.collapsibleContent();
+      ABM.behaviors.mobileMainNav();
+    },
+    smartphonePortrait: function() {},
+    smartphoneLandscape: function() {},
+    tablet: function() {
+      $('#block-system-main-menu ul > li.expanded').off('click.mobileNav');
+    },
+    tabletPortrait: function() {},
+    tabletLandscape: function() {}
+  };
+
+})(jQuery);
+
+jQuery(function($) {
+  if (jQuery(window).width() <= ABM.queries.mobileBreakpoint) {
+    ABM.behaviors.mobileMainNav();
+  }
+});
+
+jQuery(function ($) {
+  if ($('body').hasClass('node-type-legacy-content-item')) {
+    $('.pane-node-body table').css('width', "100%");
+    $('.pane-node-body img').css({
+       'width' : 'auto',
+       'height' : 'auto'
+    });
+    $('.pane-node-body figure').css('width', "");
+  }
+});
+
+jQuery(document).ready(function($){
+
+
+    if ($('body').hasClass('page-node')) {
+        $('div.paragraphs-items-field-body-paragraphs div.field-name-field-embedded-image-caption').each(function() {
+            $(this).hide();
+            }
+        );
+
+        setTimeout(function() {
+            $('div.paragraphs-items-field-body-paragraphs div.field-name-field-embedded-image-caption').each(function() {
+                    $(this).css('margin', "5px auto");
+                    var siblingimgwidth = $(this).parent('div.content').find('div.field-name-field-paragraphs-embedded-image img').css('width');
+                    $(this).css('width', siblingimgwidth);
+                    $(this).show();
+                }
+            );
+        }, 5000);
+
+        //$('div.paragraphs-items-field-body-paragraphs div.field-name-field-embedded-image-caption').each(function() {
+        //        $(this).css('margin', "5px auto");
+        //        var siblingimgwidth = $(this).delay(10000).parent('div.content').find('div.field-name-field-paragraphs-embedded-image img').css('width');
+        //        $(this).css('width', siblingimgwidth);
+        //    }
+        //);
+    }
+});
+
+/**
+ * Created by MacPro-jkotz on 9/15/15.
+ */
+    jQuery(document).ready(function($){
+        var return_path = window.location.pathname;
+        jQuery('#block-system-user-menu .menu li a').each(function(){
+            //console.log(jQuery(this).attr('href'));
+            var href = jQuery(this).attr('href');
+            if((href == "/user/login" || href == "/user/logout") && return_path != "/"){
+                jQuery(this).attr('href',href + "?destination=" + return_path);
+            }
+        });
+
+        // adds the attr for modal iomages
+        $('a', '.field-name-field-paragraphs-embedded-image').each(function() {
+//            console.log(this);
+            $(this).attr('data-featherlight', 'image');
+        });
+
+        $('.form-submit', '#abm-sponsorship-upsell-form').on('click', function() {
+            console.log('click');
+            try {
+                if (this.name == 'silver') {
+                    s.linkTrackVars = 'events';
+                    s.linkTrackEvents = 'event64';
+                    s.events = 'event64';
+                    s.tl(this, 'o', 'Directory Silver Package CTA');
+                }
+                if (this.name == 'gold') {
+                    s.linkTrackVars = 'events';
+                    s.linkTrackEvents = 'event65';
+                    s.events = 'event65';
+                    s.tl(this, 'o', 'Directory Gold Package CTA');
+                }
+            } catch(e) {
+                if (typeof console == 'object') {
+                    console.log("Omniture is disabled :(");
+                }
+            }
+        });
+
+    });
+
+jQuery(document).ready(function ($) {
+
+//  setTimeout(function () { 
+
+  if (($(window).width() <= 1200 )) {
+    $('#block-dfp-clone-of-wallpaper').remove();
+  }
+
+  if (($(window).width() <= 970)) {
+    $('.pane-dfp-billboard').remove();
+  }
+
+  if (($(window).width() <= 760)) {
+    $('.pane-dfp-leaderboard-small-banner-hybrid').remove();
+    $('#block-dfp-clone-of-roadblock').remove();
+    $('#block-abm-roadblock-abm-roadblock').remove();
+    $('#dfp-ad-roadblock_modal').remove();
+  }
+
+//  }, 2000);
+
+});
+
+jQuery(function ($) {
+
+  var footerHeight, currentYear, flyinHolder;
+
+  currentYear = (new Date).getFullYear();
+  flyinHolder = $('#abm-video-flyin-holder');
+
+  if(($(window).height() <= 320)) {
+    $("#footer").css("height", '220px');
+  } 
+  else if(($(window).height() <= 420)) {
+    $("#footer").css("height", '320px');
+  }
+  else {
+    $("#footer").css("height", '400px');
+  };
+
+  footerHeight = $("#footer").outerHeight() + 600;
+
+  $("#footer").css("bottom", -footerHeight);
+
+  $("#footer").before("<div id='footer-expand'><p id='expand-action'>+ Expand for more information.</p><p id='expand-cr'>&copy; Copyright " +currentYear + " Advantage Business Marketing</p></div>");
+
+  $("#footer").before('<div id="footer-collapse"><p id="collapse-action">- Collapse</p></div>');
+
+  $("#footer-expand").click(function () {
+    flyinHolder.hide();
+    $("#wallpaper-click").hide();
+    $("#footer").css("bottom", 0);
+    $("#footer-collapse").css("visibility", 'visible');
+    $('body').toggleClass("footer-open");
+    if(($(window).height() <= 320)) {
+      $("#footer-collapse").css("bottom", '220px');
+    }
+    else if(($(window).height() <= 420)) {
+      $("#footer-collapse").css("bottom", '320px');
+    }
+    else {
+      $("#footer-collapse").css("bottom", '400px');
+    }
+  });
+
+  $("#footer-collapse").click(function () {
+    flyinHolder.show();
+    $("#wallpaper-click").show();
+    $("#footer").css("bottom", -footerHeight);
+    $('body').toggleClass("footer-open");
+    $("#footer-collapse").css({
+      bottom: 0,
+      visibility: 'hidden',
+    });
+  });
+
+});
+
+jQuery(document).ready(function($){
+    $(".views-field-field-sponsored-content").parent().addClass("sponsored-content-background-color");
+});
+
+jQuery(document).ready(function($){
+    $(".field-name-field-downloadable-file a").attr("download", "");
+});

@@ -1,0 +1,16 @@
+Austin Zhang
+604736503
+Assignment 7
+
+1. The network would still be secure. Although other teams can see the 
+receiver's public key, the messages are encripted with this public key but 
+are decrypted by the receiver's private key, which remains unknown to the 
+other teams.
+
+(1) If the other teams somehow obtained my team's keystrokes, the private key still remains unknown to them. Even if the same passphrase is entered, the private key is still generated at random and thus would be different.
+
+(2) If the other teams somehow had temporary control of the USB and if the system files were on the USB, the exchange would not be secure. In this case, having access to the system files means having access to the private key data.
+
+2. The pgp --verify command does not really verify that the user personally created the file in question, in that the command uses a public key to compare the cleartext signature to the decrypted data. Thus, it becomes possible to circumnavigate this verifcation by intercepting the data, signing it, and sending it with a different public key. 
+
+A possible fix would be to make my public key and signature publicly accessible so that any user with the tar file can run the command and verify that it was created by me.

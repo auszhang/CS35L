@@ -1,0 +1,90 @@
+Austin Zhang
+604736503
+CS35L 
+Assignment 9
+hw9.txt
+
+2. 
+Check out version 3.0 of diffutils from my repository into a branch named 
+"quote":
+	cd diffutils
+	git checkout -b 'quote' 'v3.0'
+
+3. 
+Installing change into this new branch:
+	patch -p1 < quote-3.0-patch.txt
+
+patching file src/cmp.c
+patching file src/diff.c
+patching file src/diff3.c
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+
+4. 
+Learn how to use the Emacs function
+
+5. 
+For each of the six files above, I opened them in emacs and in the 
+changlog, I used (C-x 4 a) to add an appropriate message.g
+
+6. 
+Committed my changes to a new branch:
+	git add .
+	git commit -aF ChangeLog
+
+7. 
+Generated the patch:
+	git format-patch -1 --stdout > formattedpatch.txt
+
+8. 
+My partner sent me his patch, which I renaimed partner-patch.txt
+
+I first created a new branch called 'partner':
+	git checkout -b 'partner' 'v3.0' 
+
+Applying the patch:
+	git am partner-patch.txt
+
+I repeated the compilation process to check if it works:
+	./bootstrap
+	./configure
+	make
+	make check
+
+9. 
+I used the command 'make distdir' and opened the ChangLog file to check 
+that my partner's change was the most recent change in the log.
+
+10. 
+Cloned the repository into a new folder called repo:
+	git clone git://git.savannah.gnu.org/emacs.git repo
+
+Output: 
+Cloning into 'repo'...
+remote: Counting objects: 824036, done.
+remote: Compressing objects: 100% (147584/147584), done.
+remote: Total 824036 (delta 675600), reused 823822 (delta 675444)
+Receiving objects: 100% (824036/824036), 256.35 MiB | 2.00 MiB/s, done.
+Resolving deltas: 100% (675600/675600), done.
+Checking out files: 100% (3862/3862), done.
+
+First, I logged out of the linux server and reconnected with the -X option 
+after installing Xming:
+From piazza:
+"Open up the command putty.exe by double-click it. It will brings up the 
+interface. First, setup the connection info in Host Name (or use IP) field 
+and select SSH (SSH is using port 22). In Connection Category, find the 
+
+Connection tree. In SSH, expand it and you will see Tunnels window. Click 
+"Enable X11 forwarding". It is setting the default to X display at 
+"localhost:0". Now, go back to Session and save this session with a name 
+you like. I normally use the Host Name to make me easily remember where I 
+am connecting to."
+
+After that is done:
+	cd ~/Desktop/CS35L/Lab9/repo
+	gitk
+
+This opened a window in XMing. The newest file not newer than 2015-01-25 
+is an entry by Joakim Verona.

@@ -1,0 +1,71 @@
+jQuery(function ($) {
+
+  "use strict";
+
+  var showModal, setCookie, winH, winW;
+
+  showModal = function () {
+    if (window.screen.width < 767) {
+      return false;
+    }
+//    if (window.location.href.lastIndexOf('et_cid') !== -1) {
+//      return false;
+//    }
+    if ($.cookie("RoadBlock")) {
+      return false;
+    }
+    return true;
+  };
+
+  setTimeout(function () {
+    if ($('#dfp-ad-roadblock_modal').css('display') === 'none') {
+      $('#shade').remove();
+    }
+  }, 3099);
+
+  setCookie = function (name, value, daysUntilExpiration) {
+    $.cookie(name, value, {
+      path: '/',
+      expires: daysUntilExpiration
+    });
+  };
+
+  winH = $(window).height();
+  winW = $(window).width();
+
+  if (showModal()) {
+    setTimeout(function () {
+      $('#roadblock').css({
+        'position': 'fixed',
+        'top': winH / 2 - 480 / 2,
+        'left': winW / 2 - 640 / 2
+      });
+      $('#roadblock').fadeTo(300, 1.0);
+      $(window).resize(function () {
+        $('#roadblock').css('position', 'fixed').css({
+          top: ($(window).height() - 480) / 2,
+          left: ($(window).width() - 640) / 2
+        });
+      });
+    }, 3000);
+    setTimeout(function () {
+      var $shade = $('#shade').css({
+        'background': 'black',
+        'opacity': '1',
+        'position': 'fixed',
+        'top': '0',
+        'right': '0',
+        'bottom': '0',
+        'left': '0',
+        'z-index': '1999999'
+      });
+    }, 3100);
+    $('#btnClose, #shade, a.close').click(function (e) {
+      $('#block-abm-roadblock-abm-roadblock, #shade').fadeOut();
+      e.preventDefault();
+      e.stopPropagation();
+      $.cookie('RoadBlock', '24h', { expires: 1, path: '*' });
+    });
+  }
+
+});

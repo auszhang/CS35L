@@ -1,0 +1,48 @@
+/**
+ * Created by jgrubb on 3/4/16.
+ */
+jQuery(function ($) {
+    $('#footer-form').on('submit', function (e) {
+        validateEmail(submitForm, displayValidationMsg);
+        e.preventDefault();
+    });
+
+    var replaceForm = function () {
+        $('.submit-message, #footer-form').toggle();
+    };
+
+    var validateEmail = function (success, err) {
+      success();
+//        var email = $('#email').val();
+//        $.getJSON('//ep1.advantagemedia.com/email_validation?email=' + email + '&callback=?', function(data) {
+//            if (true) {
+//                success();
+//            } else {
+//                err(data.ReasonDescription);
+//            }
+//        });
+    };
+
+    var submitForm = function () {
+        $.post('/subform', $('#footer-form').serialize(), function (data) {
+            if (data == 'success') {
+                replaceForm();
+
+                if(typeof s.tl === 'function') {
+                    s.linkTrackVars = "events";
+                    s.linkTrackEvents = s.events = "event22";
+                    s.tl(this, 'o', 'Footer Form Submission');
+                }
+
+                return data;
+            }
+        });
+    };
+
+    var displayValidationMsg = function(msg) {
+        $('#email_verify_alert').text(msg);
+    };
+
+
+
+});

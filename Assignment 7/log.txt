@@ -1,0 +1,59 @@
+Austin Zhang
+604736503
+Assignment 7
+
+For this lab, I worked with Kenny Chan (004769092)
+
+Before I started, I set up the beaglebone using the instructions on piazza 
+and START.htm. I then installed the correct drivers (64-bit).
+
+To connect the beaglebone to wifi, I opened putty, typed in the IP address 
+in the host address bar, and when prompted for a username, I entered root 
+with no password. 
+
+To connect to wifi, I used the following commands:
+	sudo connmanctl
+	connmanctl> enable wifi
+	connmanctl> scan wifi
+	connmanctl> services
+	connmanctl> agent on
+	connmanctl> connect wifi_506583d4fc5e_544e434150413937414239_managed_psk
+	Passphrase? 3760ClassNet
+	connmanctl> quit
+
+To install firefox, I used the following commands:
+	sudo apt-get updated
+	sudo apt-get install xauth
+	sudo apt-get install firefox-esr-|10n-en-gb
+
+To check that I had the openssh-server and openssh-client installed, I used 
+the following command:
+	dpkg --get-selections | grep openssh
+
+I did not have them, so I installed them with these commands:
+	sudo apt-get install openssh-server
+	sudo apt-get install openssh-client
+
+My partner SSHed into my beaglebone, which meant that I was the server.
+The server generated public and private keys for the client with the command
+	ssh-keygen
+
+Creating an account for the client:
+	sudo useradd -d /Desktop/CS35L/Lab7 -m kman
+	sudo passwd kman69
+
+Created a .ssh directory:
+	cd /Desktop/CS35L/Lab7
+	sudo mkdir .ssh
+
+Changed ownership and permission:
+	sudo chown -R kman .ssh
+	sudo chmod 700 .ssh
+
+My partner inputted the commands for the client side:
+	Generated public keys: ssh-keygen
+	Copied keys to server: ssh-copy-id-i kman@<my_ip> ... ssh-add
+	SSH'd into my server: ssh -Y kman@<my_ip>
+	Opened firefox: firefox
+
+This allowed us to browse firefox from my partner's laptop. After this, we switched roles, where I was the client and he was the server.
